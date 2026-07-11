@@ -279,7 +279,7 @@
 <script>
 // ── Config ──────────────────────────────────────────────────────
 const HOTSPOTS_URL    = 'hotspots.json';
-const DEBUG_HOTSPOTS  = true;   // false = Punkte unsichtbar (finale Version)
+const DEBUG_HOTSPOTS  = false;   // false = Punkte unsichtbar (finale Version)
 const MAX_RADIUS_FRAC = 0.18;   // Hörradius als Anteil der Kartenbreite
 
 // ── State ───────────────────────────────────────────────────────
@@ -550,6 +550,9 @@ async function init() {
   mapWrap.addEventListener('mousemove', e => {
     initAudio();
     updateVolumes(e.clientX, e.clientY);
+    const r = mapWrap.getBoundingClientRect();
+    console.log(Math.round((e.clientX - r.left) / r.width * MAP_PX_W),
+                Math.round((e.clientY - r.top)  / r.height * MAP_PX_H));
   });
   mapWrap.addEventListener('mouseleave', () => {
     for (const hs of hotspots) {
