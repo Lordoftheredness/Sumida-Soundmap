@@ -1,0 +1,87 @@
+[
+  {
+    "name": "Sumida-Fluss Ufer Nord",
+    "pos": [420, 180],
+    "sounds": {
+      "default":    { "day": "sounds/river_north_day.wav",    "night": "sounds/river_north_night.wav" },
+      "2024-03-20": { "day": "sounds/river_north_spring.wav", "night": "sounds/river_north_night.wav" }
+    }
+  },
+  {
+    "name": "Tokyo Skytree Platz",
+    "pos": [1080, 260],
+    "sounds": {
+      "default": { "day": "sounds/skytree_day.wav", "night": "sounds/skytree_night.wav" }
+    }
+  },
+  {
+    "name": "Ryogoku Sumo-Halle",
+    "pos": [870, 620],
+    "sounds": {
+      "default": { "day": "sounds/sumo_hall_day.wav", "night": "sounds/sumo_hall_night.wav" }
+    }
+  },
+  {
+    "name": "Kleine Seitenstraße",
+    "pos": [300, 420],
+    "sounds": {
+      "default": { "day": "sounds/alley_day.wav", "night": "sounds/alley_night.wav" }
+    }
+  },
+  {
+    "name": "Markt / Straßenstand",
+    "pos": [680, 760],
+    "sounds": {
+      "default": { "day": "sounds/market_day.wav", "night": "sounds/market_night.wav" }
+    }
+  },
+  {
+    "name": "Tempelbereich",
+    "pos": [1240, 700],
+    "sounds": {
+      "default": { "day": "sounds/temple_day.wav", "night": "sounds/temple_night.wav" }
+    }
+  },
+  {
+    "name": "Brücke über den Fluss",
+    "pos": [480, 640],
+    "sounds": {
+      "default": { "day": "sounds/bridge_day.wav", "night": "sounds/bridge_night.wav" }
+    }
+  },
+  {
+    "name": "Sumida-Fluss Ufer Süd",
+    "pos": [460, 920],
+    "sounds": {
+      "default": { "day": "sounds/river_south_day.wav", "night": "sounds/river_south_night.wav" }
+    }
+  },
+  {
+    "name": "Bahnhof Kinshicho",
+    "pos": [1000, 480],
+    "sounds": {
+      "default": { "day": "sounds/station_day.wav", "night": "sounds/station_night.wav" }
+    }
+  },
+  {
+    "name": "Wohngebiet",
+    "pos": [220, 700],
+    "sounds": {
+      "default": { "day": "sounds/residential_day.wav", "night": "sounds/residential_night.wav" }
+    }
+  },
+  {
+    "name": "Hafenbereich",
+    "pos": [620, 1000],
+    "sounds": {
+      "default": { "day": "sounds/harbor_day.wav", "night": "sounds/harbor_night.wav" }
+    }
+  },
+  {
+    "name": "Park am Fluss",
+    "pos": [840, 900],
+    "sounds": {
+      "default": { "day": "sounds/park_day.wav", "night": "sounds/park_night.wav" }
+    }
+  }
+]

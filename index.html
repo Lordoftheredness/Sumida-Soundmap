@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sumida Soundmap</title>
+<style>
+  /* ── Tokens ─────────────────────────────────────────────────── */
+  :root {
+    --ink:        #1a1a24;
+    --panel:      #1e1e2a;
+    --panel-mid:  #26263a;
+    --rim:        #32324a;
+    --text:       #d4d4e0;
+    --text-dim:   #7878a0;
+    --accent:     #7eb8d4;
+    --day:        #f0c84a;
+    --night:      #4a4aaa;
+    --sel:        #4a90c0;
+    --hover:      #2e2e42;
+    --font-jp:    'Hiragino Kaku Gothic Pro', 'Noto Sans JP', sans-serif;
+    --panel-w:    210px;
+    --radius:     6px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--ink);
+    color: var(--text);
+    font-family: var(--font-jp);
+    font-size: 13px;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  /* ── Map area ────────────────────────────────────────────────── */
+  #map-wrap {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    cursor: crosshair;
+  }
+
+  #map-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+  }
+
+  /* debug dot */
+  .hotspot-dot {
+    position: absolute;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: rgba(220,60,60,0.85);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .hotspot-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(220,60,60,0.4);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .hotspot-label {
+    position: absolute;
+    transform: translate(6px, -50%);
+    background: rgba(255,255,255,0.82);
+    color: #1a1a24;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 11px;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  /* ── Panel ───────────────────────────────────────────────────── */
+  #panel {
+    width: var(--panel-w);
+    min-width: var(--panel-w);
+    background: var(--panel);
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-left: 1px solid var(--rim);
+    overflow-y: auto;
+  }
+
+  .panel-section {
+    padding: 14px 12px 10px;
+    border-bottom: 1px solid var(--rim);
+  }
+
+  .panel-label {
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  /* ── Day/Night toggle ────────────────────────────────────────── */
+  #dn-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    width: 100%;
+    padding: 9px 0;
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--font-jp);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+  }
+  #dn-btn.day   { background: var(--day);   color: #1a1a24; }
+  #dn-btn.night { background: var(--night); color: #d4d4e0; }
+
+  /* ── Calendar ────────────────────────────────────────────────── */
+  #cal-year-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  #cal-year-row button {
+    background: var(--hover);
+    border: none;
+    color: var(--text);
+    width: 24px; height: 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #cal-year-row button:hover { background: var(--rim); }
+  #cal-year { font-weight: 700; font-size: 14px; }
+
+  /* Month dropdown */
+  #month-dropdown-wrap { position: relative; margin-bottom: 10px; }
+  #month-btn {
+    width: 100%;
+    background: var(--panel-mid);
+    border: 1px solid var(--rim);
+    color: var(--text);
+    padding: 5px 10px;
+    border-radius: var(--radius);
+    text-align: left;
+    cursor: pointer;
+    font-family: var(--font-jp);
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  #month-btn:hover { background: var(--hover); }
+  #month-list {
+    display: none;
+    position: absolute;
+    top: calc(100% + 3px);
+    left: 0; right: 0;
+    background: var(--panel-mid);
+    border: 1px solid var(--rim);
+    border-radius: var(--radius);
+    z-index: 100;
+    overflow: hidden;
+    max-height: 220px;
+    overflow-y: auto;
+  }
+  #month-list.open { display: block; }
+  .month-item {
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  .month-item:hover   { background: var(--hover); }
+  .month-item.active  { background: var(--sel); color: #fff; }
+
+  /* Calendar grid */
+  #cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+  }
+  .cal-wd {
+    text-align: center;
+    font-size: 10px;
+    color: var(--text-dim);
+    padding-bottom: 3px;
+  }
+  .cal-wd.weekend { color: var(--accent); }
+  .cal-day {
+    text-align: center;
+    padding: 3px 0;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  .cal-day:hover    { background: var(--hover); }
+  .cal-day.today    { background: var(--panel-mid); }
+  .cal-day.selected { background: var(--sel); color: #fff; }
+  .cal-day.empty    { cursor: default; }
+
+  /* Selected date display */
+  #selected-date {
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--accent);
+    text-align: center;
+  }
+
+  /* ── Status bar ──────────────────────────────────────────────── */
+  #status {
+    margin-top: auto;
+    padding: 10px 12px;
+    font-size: 11px;
+    color: var(--text-dim);
+    border-top: 1px solid var(--rim);
+    min-height: 40px;
+  }
+  #status span { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- ── Map ─────────────────────────────────────────────────────── -->
+<div id="map-wrap">
+  <img id="map-img" src="map.png" alt="Sumida Karte">
+</div>
+
+<!-- ── Panel ───────────────────────────────────────────────────── -->
+<div id="panel">
+
+  <!-- Tag / Nacht -->
+  <div class="panel-section">
+    <div class="panel-label">Tageszeit</div>
+    <button id="dn-btn" class="day">☀ Tag</button>
+  </div>
+
+  <!-- Kalender -->
+  <div class="panel-section">
+    <div class="panel-label">Datum</div>
+
+    <!-- Jahr -->
+    <div id="cal-year-row">
+      <button id="yr-prev">‹</button>
+      <span id="cal-year">2025</span>
+      <button id="yr-next">›</button>
+    </div>
+
+    <!-- Monat-Dropdown -->
+    <div id="month-dropdown-wrap">
+      <button id="month-btn">
+        <span id="month-label">Januar</span>
+        <span>▾</span>
+      </button>
+      <div id="month-list"></div>
+    </div>
+
+    <!-- Tage -->
+    <div id="cal-grid"></div>
+    <div id="selected-date"></div>
+  </div>
+
+  <!-- Status -->
+  <div id="status">Maus über die Karte bewegen …</div>
+</div>
+
+<script>
+// ── Config ──────────────────────────────────────────────────────
+const HOTSPOTS_URL    = 'hotspots.json';
+const DEBUG_HOTSPOTS  = true;   // false = Punkte unsichtbar (finale Version)
+const MAX_RADIUS_FRAC = 0.18;   // Hörradius als Anteil der Kartenbreite
+
+// ── State ───────────────────────────────────────────────────────
+const MONTHS_DE = ['Januar','Februar','März','April','Mai','Juni',
+                   'Juli','August','September','Oktober','November','Dezember'];
+
+let hotspots    = [];
+let audioCtx    = null;
+let timeOfDay   = 'day';
+let viewYear, viewMonth, selectedDate;
+
+// ── Helpers ─────────────────────────────────────────────────────
+function padDate(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function resolveUrl(hs) {
+  const sounds = hs.sounds;
+  const dateKey = padDate(selectedDate);
+  const entry   = sounds[dateKey] || sounds['default'] || {};
+  return entry[timeOfDay] || entry['day'] || entry['night'] || null;
+}
+
+// ── Audio ───────────────────────────────────────────────────────
+function initAudio() {
+  if (audioCtx) return;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+}
+
+async function loadBuffer(url) {
+  const res  = await fetch(url);
+  const arr  = await res.arrayBuffer();
+  return audioCtx.decodeAudioData(arr);
+}
+
+async function reloadSounds() {
+  initAudio();
+  for (const hs of hotspots) {
+    // Stop old source
+    if (hs._source) { try { hs._source.stop(); } catch(e){} }
+    hs._source  = null;
+    hs._gainNode = null;
+
+    const url = resolveUrl(hs);
+    if (!url) continue;
+
+    try {
+      const buffer  = await loadBuffer(url);
+      const gain    = audioCtx.createGain();
+      gain.gain.value = 0;
+      gain.connect(audioCtx.destination);
+
+      const src = audioCtx.createBufferSource();
+      src.buffer = buffer;
+      src.loop   = true;
+      src.connect(gain);
+      src.start();
+
+      hs._gainNode = gain;
+      hs._source   = src;
+    } catch(e) {
+      console.warn('Sound nicht geladen:', url, e);
+    }
+  }
+}
+
+// ── Volume by distance ───────────────────────────────────────────
+function updateVolumes(mx, my) {
+  const wrap   = document.getElementById('map-wrap');
+  const rect   = wrap.getBoundingClientRect();
+  const maxR   = rect.width * MAX_RADIUS_FRAC;
+
+  let nearest  = null;
+  let nearDist = Infinity;
+
+  for (const hs of hotspots) {
+    if (!hs._gainNode) continue;
+
+    // Hotspot pos is in original-image-fraction coordinates (0..1)
+    const px = hs._px * rect.width  + rect.left;
+    const py = hs._py * rect.height + rect.top;
+    const d  = Math.hypot(mx - px, my - py);
+
+    let vol = 0;
+    if (d < maxR) {
+      const ratio = 1 - d / maxR;
+      vol = ratio * ratio; // quadratic falloff
+    }
+    hs._gainNode.gain.setTargetAtTime(vol, audioCtx.currentTime, 0.05);
+
+    if (d < nearDist) { nearDist = d; nearest = hs; }
+  }
+
+  // Status bar
+  const status = document.getElementById('status');
+  if (nearest && nearDist < document.getElementById('map-wrap').getBoundingClientRect().width * MAX_RADIUS_FRAC) {
+    status.innerHTML = `<span>${nearest.name}</span>`;
+  } else {
+    status.textContent = 'Maus über die Karte bewegen …';
+  }
+}
+
+// ── Debug overlay ────────────────────────────────────────────────
+function renderDebugDots() {
+  document.querySelectorAll('.hotspot-dot,.hotspot-ring,.hotspot-label').forEach(e=>e.remove());
+  if (!DEBUG_HOTSPOTS) return;
+
+  const wrap = document.getElementById('map-wrap');
+  const rect = wrap.getBoundingClientRect();
+  const maxR = rect.width * MAX_RADIUS_FRAC;
+
+  for (const hs of hotspots) {
+    const px = hs._px * 100;   // percent
+    const py = hs._py * 100;
+
+    const dot = document.createElement('div');
+    dot.className = 'hotspot-dot';
+    dot.style.left = px + '%';
+    dot.style.top  = py + '%';
+    wrap.appendChild(dot);
+
+    const ring = document.createElement('div');
+    ring.className = 'hotspot-ring';
+    const rw = maxR * 2;
+    ring.style.width  = rw + 'px';
+    ring.style.height = rw + 'px';
+    ring.style.left   = px + '%';
+    ring.style.top    = py + '%';
+    wrap.appendChild(ring);
+
+    const lbl = document.createElement('div');
+    lbl.className = 'hotspot-label';
+    lbl.textContent = hs.name;
+    lbl.style.left = px + '%';
+    lbl.style.top  = py + '%';
+    wrap.appendChild(lbl);
+  }
+}
+
+// ── Calendar ─────────────────────────────────────────────────────
+function buildMonthList() {
+  const list = document.getElementById('month-list');
+  list.innerHTML = '';
+  MONTHS_DE.forEach((name, i) => {
+    const div = document.createElement('div');
+    div.className = 'month-item' + (i+1 === viewMonth ? ' active' : '');
+    div.textContent = name;
+    div.addEventListener('click', () => {
+      viewMonth = i + 1;
+      closeMonthDropdown();
+      renderCalendar();
+    });
+    list.appendChild(div);
+  });
+}
+
+function closeMonthDropdown() {
+  document.getElementById('month-list').classList.remove('open');
+}
+
+function renderCalendar() {
+  document.getElementById('cal-year').textContent  = viewYear;
+  document.getElementById('month-label').textContent = MONTHS_DE[viewMonth - 1];
+  buildMonthList();
+
+  const grid  = document.getElementById('cal-grid');
+  grid.innerHTML = '';
+
+  // Weekday headers
+  ['Mo','Di','Mi','Do','Fr','Sa','So'].forEach((wd, i) => {
+    const d = document.createElement('div');
+    d.className = 'cal-wd' + (i >= 5 ? ' weekend' : '');
+    d.textContent = wd;
+    grid.appendChild(d);
+  });
+
+  // Days
+  const today    = new Date();
+  const firstDay = new Date(viewYear, viewMonth - 1, 1).getDay(); // 0=Sun
+  const offset   = (firstDay + 6) % 7; // Monday-first
+  const daysInMonth = new Date(viewYear, viewMonth, 0).getDate();
+
+  for (let i = 0; i < offset; i++) {
+    const e = document.createElement('div'); e.className='cal-day empty'; grid.appendChild(e);
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const cell = document.createElement('div');
+    const thisDate = new Date(viewYear, viewMonth - 1, d);
+    const isToday  = thisDate.toDateString() === today.toDateString();
+    const isSel    = selectedDate && thisDate.toDateString() === selectedDate.toDateString();
+    cell.className = 'cal-day' + (isToday ? ' today' : '') + (isSel ? ' selected' : '');
+    cell.textContent = d;
+    cell.addEventListener('click', () => {
+      selectedDate = new Date(viewYear, viewMonth - 1, d);
+      renderCalendar();
+      reloadSounds();
+      updateSelectedLabel();
+    });
+    grid.appendChild(cell);
+  }
+
+  updateSelectedLabel();
+}
+
+function updateSelectedLabel() {
+  const el = document.getElementById('selected-date');
+  el.textContent = selectedDate ? padDate(selectedDate) : '';
+}
+
+// ── Init ─────────────────────────────────────────────────────────
+async function init() {
+  const today   = new Date();
+  viewYear      = today.getFullYear();
+  viewMonth     = today.getMonth() + 1;
+  selectedDate  = today;
+
+  // Load hotspots
+  const res  = await fetch(HOTSPOTS_URL);
+  const data = await res.json();
+
+  // Convert pos from pixel coords to fractions (0..1)
+  // IMPORTANT: set MAP_PX_W / MAP_PX_H to your map image's pixel dimensions
+  const MAP_PX_W = 1080;
+  const MAP_PX_H = 1080;
+
+  hotspots = data.map(h => ({
+    ...h,
+    _px: h.pos[0] / MAP_PX_W,
+    _py: h.pos[1] / MAP_PX_H,
+  }));
+
+  // Calendar
+  renderCalendar();
+
+  // Debug dots (re-render on resize)
+  renderDebugDots();
+  window.addEventListener('resize', renderDebugDots);
+
+  // Month dropdown toggle
+  document.getElementById('month-btn').addEventListener('click', e => {
+    e.stopPropagation();
+    document.getElementById('month-list').classList.toggle('open');
+    buildMonthList();
+  });
+  document.addEventListener('click', closeMonthDropdown);
+
+  // Year arrows
+  document.getElementById('yr-prev').addEventListener('click', () => {
+    viewYear--; renderCalendar();
+  });
+  document.getElementById('yr-next').addEventListener('click', () => {
+    viewYear++; renderCalendar();
+  });
+
+  // Day/Night button
+  const dnBtn = document.getElementById('dn-btn');
+  dnBtn.addEventListener('click', () => {
+    initAudio();
+    timeOfDay = timeOfDay === 'day' ? 'night' : 'day';
+    dnBtn.className = timeOfDay;
+    dnBtn.textContent = timeOfDay === 'day' ? '☀ Tag' : '☾ Nacht';
+    reloadSounds();
+  });
+
+  // Mouse move on map
+  const mapWrap = document.getElementById('map-wrap');
+  mapWrap.addEventListener('mousemove', e => {
+    initAudio();
+    updateVolumes(e.clientX, e.clientY);
+  });
+  mapWrap.addEventListener('mouseleave', () => {
+    for (const hs of hotspots) {
+      if (hs._gainNode) hs._gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1);
+    }
+    document.getElementById('status').textContent = 'Maus über die Karte bewegen …';
+  });
+
+  // Touch support
+  mapWrap.addEventListener('touchmove', e => {
+    e.preventDefault();
+    initAudio();
+    const t = e.touches[0];
+    updateVolumes(t.clientX, t.clientY);
+  }, { passive: false });
+}
+
+init();
+</script>
+</body>
+</html>
