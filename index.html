@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sumida Soundmap</title>
+<title>Sumida Sound Map</title>
 <style>
   /* ── Tokens ─────────────────────────────────────────────────── */
   :root {
@@ -49,7 +49,7 @@
   }
 
   #map-wrap.night-mode {
-    background: #1a1a24;  /* dunkler Hintergrund für Nachtkarte */
+    background: #1a1a24;  /* dark background for night map */
   }
 
   #map-img {
@@ -251,15 +251,15 @@
 <!-- ── Panel ───────────────────────────────────────────────────── -->
 <div id="panel">
 
-  <!-- Tag / Nacht -->
+  <!-- Day / Night -->
   <div class="panel-section">
-    <div class="panel-label">Tageszeit</div>
-    <button id="dn-btn" class="day">☀ Tag</button>
+    <div class="panel-label">Time of Day</div>
+    <button id="dn-btn" class="day">☀ Day</button>
   </div>
 
   <!-- Kalender -->
   <div class="panel-section">
-    <div class="panel-label">Datum</div>
+    <div class="panel-label">Date</div>
 
     <!-- Jahr -->
     <div id="cal-year-row">
@@ -271,7 +271,7 @@
     <!-- Monat-Dropdown -->
     <div id="month-dropdown-wrap">
       <button id="month-btn">
-        <span id="month-label">Januar</span>
+        <span id="month-label">January</span>
         <span>▾</span>
       </button>
       <div id="month-list"></div>
@@ -283,7 +283,7 @@
   </div>
 
   <!-- Status -->
-  <div id="status">Maus über die Karte bewegen …</div>
+  <div id="status">Move your cursor over the map …</div>
 </div>
 
 <script>
@@ -293,8 +293,8 @@ const DEBUG_HOTSPOTS  = true;   // false = Punkte unsichtbar (finale Version)
 const MAX_RADIUS_FRAC = 0.18;   // Hörradius als Anteil der Kartenbreite
 
 // ── State ───────────────────────────────────────────────────────
-const MONTHS_DE = ['Januar','Februar','März','April','Mai','Juni',
-                   'Juli','August','September','Oktober','November','Dezember'];
+const MONTHS_DE = ['January','February','March','April','May','June',
+                   'July','August','September','October','November','December'];
 
 let hotspots    = [];
 let audioCtx    = null;
@@ -388,7 +388,7 @@ function updateVolumes(mx, my) {
   if (nearest && nearDist < document.getElementById('map-wrap').getBoundingClientRect().width * MAX_RADIUS_FRAC) {
     status.innerHTML = `<span>${nearest.name}</span>`;
   } else {
-    status.textContent = 'Maus über die Karte bewegen …';
+    status.textContent = 'Move your cursor over the map …';
   }
 }
 
@@ -459,7 +459,7 @@ function renderCalendar() {
   grid.innerHTML = '';
 
   // Weekday headers
-  ['Mo','Di','Mi','Do','Fr','Sa','So'].forEach((wd, i) => {
+  ['Mo','Tu','We','Th','Fr','Sa','Su'].forEach((wd, i) => {
     const d = document.createElement('div');
     d.className = 'cal-wd' + (i >= 5 ? ' weekend' : '');
     d.textContent = wd;
@@ -553,7 +553,7 @@ async function init() {
     initAudio();
     timeOfDay = timeOfDay === 'day' ? 'night' : 'day';
     dnBtn.className = timeOfDay;
-    dnBtn.textContent = timeOfDay === 'day' ? '☀ Tag' : '☾ Nacht';
+    dnBtn.textContent = timeOfDay === 'day' ? '☀ Day' : '☾ Night';
     // Kartenbild und Hintergrund umschalten
     mapImg.src = timeOfDay === 'day' ? 'Map-Sumida.png' : 'Map-Sumida_night.png';
     mapWrapEl.classList.toggle('night-mode', timeOfDay === 'night');
@@ -570,7 +570,7 @@ async function init() {
     for (const hs of hotspots) {
       if (hs._gainNode) hs._gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1);
     }
-    document.getElementById('status').textContent = 'Maus über die Karte bewegen …';
+    document.getElementById('status').textContent = 'Move your cursor over the map …';
   });
 
   // Touch support
