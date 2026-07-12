@@ -327,6 +327,8 @@ async function loadBuffer(url) {
 
 async function reloadSounds() {
   initAudio();
+  console.log('reloadSounds aufgerufen, timeOfDay:', timeOfDay);
+  console.log('AudioContext state:', audioCtx.state);
   for (const hs of hotspots) {
     // Stop old source
     if (hs._source) { try { hs._source.stop(); } catch(e){} }
@@ -334,6 +336,7 @@ async function reloadSounds() {
     hs._gainNode = null;
 
     const url = resolveUrl(hs);
+    console.log(hs.name, '→ URL:', url);
     if (!url) continue;
 
     try {
