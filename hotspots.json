@@ -1,9 +1,9 @@
 [
   {
-    "name": "Sumida-Fluss Ufer Nord",
+    "name": "Sumida Aquarium",
     "pos": [420, 180],
     "sounds": {
-      "default":    { "day": "sounds/river_north_day.wav",    "night": "sounds/river_north_night.wav" },
+      "default":    { "day": "sounds/Sumida Aquarium.wav",    "night": "sounds/river_north_night.wav" },
       "2024-03-20": { "day": "sounds/river_north_spring.wav", "night": "sounds/river_north_night.wav" }
     }
   },
