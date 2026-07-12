@@ -40,14 +40,24 @@
   #map-wrap {
     position: relative;
     flex: 1;
-    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f0;  /* heller Hintergrund passend zur Tagkarte */
     cursor: crosshair;
+    overflow: hidden;
+  }
+
+  #map-wrap.night-mode {
+    background: #1a1a24;  /* dunkler Hintergrund für Nachtkarte */
   }
 
   #map-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
     display: block;
     pointer-events: none;
   }
@@ -235,7 +245,7 @@
 
 <!-- ── Map ─────────────────────────────────────────────────────── -->
 <div id="map-wrap">
-  <img id="map-img" src="map.png" alt="Sumida Karte">
+  <img id="map-img" src="Map-Sumida.png" alt="Sumida Karte">
 </div>
 
 <!-- ── Panel ───────────────────────────────────────────────────── -->
@@ -279,7 +289,7 @@
 <script>
 // ── Config ──────────────────────────────────────────────────────
 const HOTSPOTS_URL    = 'hotspots.json';
-const DEBUG_HOTSPOTS  = false;   // false = Punkte unsichtbar (finale Version)
+const DEBUG_HOTSPOTS  = true;   // false = Punkte unsichtbar (finale Version)
 const MAX_RADIUS_FRAC = 0.18;   // Hörradius als Anteil der Kartenbreite
 
 // ── State ───────────────────────────────────────────────────────
@@ -503,8 +513,8 @@ async function init() {
 
   // Convert pos from pixel coords to fractions (0..1)
   // IMPORTANT: set MAP_PX_W / MAP_PX_H to your map image's pixel dimensions
-  const MAP_PX_W = 1080;
-  const MAP_PX_H = 1080;
+  const MAP_PX_W = 1600;
+  const MAP_PX_H = 1100;
 
   hotspots = data.map(h => ({
     ...h,
@@ -536,12 +546,17 @@ async function init() {
   });
 
   // Day/Night button
-  const dnBtn = document.getElementById('dn-btn');
+  const dnBtn  = document.getElementById('dn-btn');
+  const mapImg = document.getElementById('map-img');
+  const mapWrapEl = document.getElementById('map-wrap');
   dnBtn.addEventListener('click', () => {
     initAudio();
     timeOfDay = timeOfDay === 'day' ? 'night' : 'day';
     dnBtn.className = timeOfDay;
     dnBtn.textContent = timeOfDay === 'day' ? '☀ Tag' : '☾ Nacht';
+    // Kartenbild und Hintergrund umschalten
+    mapImg.src = timeOfDay === 'day' ? 'Map-Sumida.png' : 'Map-Sumida_night.png';
+    mapWrapEl.classList.toggle('night-mode', timeOfDay === 'night');
     reloadSounds();
   });
 
@@ -550,9 +565,6 @@ async function init() {
   mapWrap.addEventListener('mousemove', e => {
     initAudio();
     updateVolumes(e.clientX, e.clientY);
-    const r = mapWrap.getBoundingClientRect();
-    console.log(Math.round((e.clientX - r.left) / r.width * MAP_PX_W),
-                Math.round((e.clientY - r.top)  / r.height * MAP_PX_H));
   });
   mapWrap.addEventListener('mouseleave', () => {
     for (const hs of hotspots) {
