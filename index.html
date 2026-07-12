@@ -289,8 +289,10 @@
 <script>
 // ── Config ──────────────────────────────────────────────────────
 const HOTSPOTS_URL    = 'hotspots.json';
-const DEBUG_HOTSPOTS  = true;   // false = Punkte unsichtbar (finale Version)
-const MAX_RADIUS_FRAC = 0.18;   // Hörradius als Anteil der Kartenbreite
+const DEBUG_HOTSPOTS  = true;   // false = dots invisible (final version)
+const MAX_RADIUS_FRAC = 0.18;   // hearing radius as fraction of map width
+const MAP_PX_W        = 1600;   // original map image width in px
+const MAP_PX_H        = 1100;   // original map image height in px
 
 // ── State ───────────────────────────────────────────────────────
 const MONTHS_DE = ['January','February','March','April','May','June',
@@ -327,8 +329,6 @@ async function loadBuffer(url) {
 
 async function reloadSounds() {
   initAudio();
-  console.log('reloadSounds aufgerufen, timeOfDay:', timeOfDay);
-  console.log('AudioContext state:', audioCtx.state);
   for (const hs of hotspots) {
     // Stop old source
     if (hs._source) { try { hs._source.stop(); } catch(e){} }
@@ -336,7 +336,6 @@ async function reloadSounds() {
     hs._gainNode = null;
 
     const url = resolveUrl(hs);
-    console.log(hs.name, '→ URL:', url);
     if (!url) continue;
 
     try {
@@ -515,10 +514,6 @@ async function init() {
   const data = await res.json();
 
   // Convert pos from pixel coords to fractions (0..1)
-  // IMPORTANT: set MAP_PX_W / MAP_PX_H to your map image's pixel dimensions
-  const MAP_PX_W = 1600;
-  const MAP_PX_H = 1100;
-
   hotspots = data.map(h => ({
     ...h,
     _px: h.pos[0] / MAP_PX_W,
@@ -568,6 +563,15 @@ async function init() {
   mapWrap.addEventListener('mousemove', e => {
     initAudio();
     updateVolumes(e.clientX, e.clientY);
+
+    // Koordinaten relativ zum Kartenbild → direkt verwendbar in hotspots.json
+    // Zum Deaktivieren: die nächsten 5 Zeilen löschen
+    const imgRect = mapImg.getBoundingClientRect();
+    const cx = Math.round((e.clientX - imgRect.left)  / imgRect.width  * MAP_PX_W);
+    const cy = Math.round((e.clientY - imgRect.top)   / imgRect.height * MAP_PX_H);
+    if (cx >= 0 && cx <= MAP_PX_W && cy >= 0 && cy <= MAP_PX_H) {
+      console.log(`[${cx}, ${cy}]`);
+    }
   });
   mapWrap.addEventListener('mouseleave', () => {
     for (const hs of hotspots) {
