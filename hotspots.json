@@ -8,17 +8,17 @@
     }
   },
   {
-    "name": "Tokyo Skytree Platz",
-    "pos": [1080, 260],
+    "name": "Ito Bindery",
+    "pos": [622, 798],
     "sounds": {
-      "default": { "day": "sounds/skytree_day.wav", "night": "sounds/skytree_night.wav" }
+      "default": { "day": "Ito Bindery.wav", "night": "sounds/skytree_night.wav" }
     }
   },
   {
-    "name": "Ryogoku Sumo-Halle",
-    "pos": [870, 620],
+    "name": "Sumida Inari Shrine",
+    "pos": [1026, 236],
     "sounds": {
-      "default": { "day": "sounds/sumo_hall_day.wav", "night": "sounds/sumo_hall_night.wav" }
+      "default": { "day": "sounds/sumo_hall_day.wav", "night": "Sumida Inari Shrine Night.MP3" }
     }
   },
   {
