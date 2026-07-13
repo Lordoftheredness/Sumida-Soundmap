@@ -16,9 +16,10 @@
   },
   {
     "name": "Sumida Inari Shrine",
-    "pos": [1026, 236],
+    "pos": [1009, 260],
     "sounds": {
-      "default": { "day": "sounds/sumo_hall_day.wav", "night": "Sumida Inari Shrine Night.MP3" }
+      "default": { "day": "sounds/sumo_hall_day.wav", "night": "sounds/ sumo_hall_night.wav" }
+      "2026-06-14": { "day": "sounds/river_north_spring.wav", "night": "Sumida Inari Shrine Night.MP3" }
     }
   },
   {
