@@ -3,7 +3,7 @@
     "name": "Sumida Aquarium",
     "pos": [811, 650],
     "sounds": {
-      "default":    { "day": "Sumida Aquarium.wav",    "night": "sounds/river_north_night.wav" },
+      "default":    { "day": "Sumida Aquarium.wav", "night": "sounds/river_north_night.wav" },
       "2024-03-20": { "day": "sounds/river_north_spring.wav", "night": "sounds/river_north_night.wav" }
     }
   },
@@ -18,7 +18,7 @@
     "name": "Sumida Inari Shrine",
     "pos": [1009, 260],
     "sounds": {
-      "default": { "day": "sounds/sumo_hall_day.wav", "night": "sounds/ sumo_hall_night.wav" }
+      "default":    { "day": "sounds/sumo_hall_day.wav", "night": "sounds/sumo_hall_night.wav" },
       "2026-06-14": { "day": "sounds/river_north_spring.wav", "night": "Sumida Inari Shrine Night.MP3" }
     }
   },
