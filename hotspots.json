@@ -59,7 +59,7 @@
   },
   {
     "name": "Train Passing",
-    "pos": [1362, 546],
+    "pos": [1262, 546],
     "sounds": {
       "default": { "day": "sounds/Train_Passing.MP3", "night": "sounds/station_night.wav" }
     }
