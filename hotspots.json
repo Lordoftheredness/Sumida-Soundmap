@@ -73,7 +73,7 @@
   },
   {
     "name": "Sumida Campus",
-    "pos": [1198, 802],
+    "pos": [1098, 802],
     "sounds": {
       "default": { "day": "sounds/harbor_day.wav", "night": "sounds/harbor_night.wav" }
     }
