@@ -23,56 +23,56 @@
     }
   },
   {
-    "name": "Kleine Seitenstraße",
+    "name": "Sumida Park",
     "pos": [300, 420],
     "sounds": {
       "default": { "day": "sounds/alley_day.wav", "night": "sounds/alley_night.wav" }
     }
   },
   {
-    "name": "Markt / Straßenstand",
+    "name": "Sumida Hokusai Museum",
     "pos": [680, 760],
     "sounds": {
       "default": { "day": "sounds/market_day.wav", "night": "sounds/market_night.wav" }
     }
   },
   {
-    "name": "Tempelbereich",
+    "name": "Sumida Gawa Shrine",
     "pos": [1240, 700],
     "sounds": {
       "default": { "day": "sounds/temple_day.wav", "night": "sounds/temple_night.wav" }
     }
   },
   {
-    "name": "Brücke über den Fluss",
+    "name": "Heritage Museum",
     "pos": [480, 640],
     "sounds": {
       "default": { "day": "sounds/bridge_day.wav", "night": "sounds/bridge_night.wav" }
     }
   },
   {
-    "name": "Sumida-Fluss Ufer Süd",
+    "name": "Leaves",
     "pos": [460, 920],
     "sounds": {
       "default": { "day": "sounds/river_south_day.wav", "night": "sounds/river_south_night.wav" }
     }
   },
   {
-    "name": "Bahnhof Kinshicho",
+    "name": "Train Passing",
     "pos": [1000, 480],
     "sounds": {
       "default": { "day": "sounds/station_day.wav", "night": "sounds/station_night.wav" }
     }
   },
   {
-    "name": "Wohngebiet",
+    "name": "River",
     "pos": [220, 700],
     "sounds": {
       "default": { "day": "sounds/residential_day.wav", "night": "sounds/residential_night.wav" }
     }
   },
   {
-    "name": "Hafenbereich",
+    "name": "Sumida Campus",
     "pos": [620, 1000],
     "sounds": {
       "default": { "day": "sounds/harbor_day.wav", "night": "sounds/harbor_night.wav" }
