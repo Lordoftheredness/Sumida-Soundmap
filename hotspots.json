@@ -1,7 +1,7 @@
 [
   {
     "name": "Sumida Aquarium",
-    "pos": [811, 650],
+    "pos": [687, 644],
     "sounds": {
       "default":    { "day": "sounds/Sumida_Aquarium.wav", "night": "sounds/river_north_night.wav" },
       "2024-03-20": { "day": "sounds/river_north_spring.wav", "night": "sounds/river_north_night.wav" }
@@ -9,14 +9,14 @@
   },
   {
     "name": "Ito Bindery",
-    "pos": [622, 798],
+    "pos": [458, 815],
     "sounds": {
       "default": { "day": "sounds/Ito_Bindery.wav", "night": "sounds/skytree_night.wav" }
     }
   },
   {
     "name": "Sumida Inari Shrine",
-    "pos": [1009, 260],
+    "pos": [1098, 310],
     "sounds": {
       "default":    { "day": "sounds/sumo_hall_day.wav", "night": "sounds/sumo_hall_night.wav" },
       "2026-06-14": { "day": "sounds/river_north_spring.wav", "night": "sounds/Sumida_Inari_Shrine_Night.MP3" }
@@ -24,56 +24,56 @@
   },
   {
     "name": "Sumida Park",
-    "pos": [300, 420],
+    "pos": [206, 522],
     "sounds": {
       "default": { "day": "sounds/Sumida_Park.wav", "night": "sounds/Sumida Park Night.wav" }
     }
   },
   {
     "name": "Sumida Hokusai Museum",
-    "pos": [680, 760],
+    "pos": [270, 899],
     "sounds": {
       "default": { "day": "sounds/Sumida Hokusai 4.wav", "night": "sounds/market_night.wav" }
     }
   },
   {
     "name": "Sumida Gawa Shrine",
-    "pos": [1240, 700],
+    "pos": [825, 297],
     "sounds": {
       "default": { "day": "sounds/temple_day.wav", "night": "sounds/temple_night.wav" }
     }
   },
   {
     "name": "Heritage Museum",
-    "pos": [480, 640],
+    "pos": [425, 442],
     "sounds": {
       "default": { "day": "sounds/Sumida_Heritage_Museum.wav", "night": "sounds/bridge_night.wav" }
     }
   },
   {
     "name": "Leaves",
-    "pos": [460, 920],
+    "pos": [1289, 509],
     "sounds": {
       "default": { "day": "sounds/Leaves.MP3", "night": "sounds/river_south_night.wav" }
     }
   },
   {
     "name": "Train Passing",
-    "pos": [1262, 546],
+    "pos": [484, 993],
     "sounds": {
       "default": { "day": "sounds/Train_Passing.MP3", "night": "sounds/station_night.wav" }
     }
   },
   {
     "name": "River",
-    "pos": [220, 700],
+    "pos": [1283, 173],
     "sounds": {
       "default": { "day": "sounds/Sumida_River.wav", "night": "sounds/residential_night.wav" }
     }
   },
   {
     "name": "Sumida Campus",
-    "pos": [620, 1000],
+    "pos": [1098, 802],
     "sounds": {
       "default": { "day": "sounds/harbor_day.wav", "night": "sounds/harbor_night.wav" }
     }
