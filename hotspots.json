@@ -18,8 +18,8 @@
     "name": "Sumida Inari Shrine",
     "pos": [1148, 310],
     "sounds": {
-      "default":    { "day": "sounds/sumo_hall_day.wav", "night": "sounds/sumo_hall_night.wav" },
-      "2026-06-14": { "day": "sounds/river_north_spring.wav", "night": "sounds/Inari_Shrine_Night.MP3" }
+      "default":    { "day": "sounds/No_Inari_Shrine_Day.wav", "night": "sounds/sumo_hall_night.wav" },
+      "2026-06-14": { "day": "sounds/Inari_Shrine_Day.mp3", "night": "sounds/Inari_Shrine_Night.MP3" }
     }
   },
   {
@@ -78,7 +78,8 @@
     "name": "Sumida Campus",
     "pos": [1098, 802],
     "sounds": {
-      "default": { "day": "sounds/harbor_day.wav", "night": "sounds/harbor_night.wav" }
+      "default": { "day": "sounds/Sumida_Campus_Day.mp3", "night": "sounds/harbor_night.wav" },
+      "2026-07-25": { "day": "sounds/river_north_spring.wav", "night": "sounds/Sumida_Campus_Hanabi.mp3" }
     }
   },
   {
