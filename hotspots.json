@@ -19,7 +19,7 @@
     "pos": [1148, 310],
     "sounds": {
       "default":    { "day": "sounds/No_Inari_Shrine_Day.wav", "night": "sounds/sumo_hall_night.wav" },
-      "2026-06-14": { "day": "sounds/Inari_Shrine_Day.mp3", "night": "sounds/Inari_Shrine_Night.MP3" }
+      "2026-06-14": { "day": "sounds/Inari_Shrine_Day.wav", "night": "sounds/Inari_Shrine_Night.MP3" }
     }
   },
   {
