@@ -19,7 +19,7 @@
     "pos": [1148, 310],
     "sounds": {
       "default":    { "day": "sounds/sumo_hall_day.wav", "night": "sounds/sumo_hall_night.wav" },
-      "2026-06-14": { "day": "sounds/river_north_spring.wav", "night": "sounds/Sumida_Inari_Shrine_Night.MP3" }
+      "2026-06-14": { "day": "sounds/river_north_spring.wav", "night": "sounds/Inari_Shrine_Night.MP3" }
     }
   },
   {
